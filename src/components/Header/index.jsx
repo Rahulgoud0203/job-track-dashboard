@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./index.css";
 import { useNavigate, Link, useLocation } from "react-router";
+import Cookies from "js-cookie";
 function Header() {
   let data;
   const [login, setLogin] = useState(false);
@@ -8,14 +9,14 @@ function Header() {
   const location = useLocation();
 
   useEffect(() => {
-    if (localStorage.getItem("email") !== null) {
+    if (Cookies.get("email_token") !== undefined) {
       setLogin(true);
     } else {
       setLogin(false);
     }
   }, [location]);
   const onLogOut = () => {
-    localStorage.removeItem("email");
+    Cookies.remove("email_token");
     setLogin(false);
   };
   const onLogIn = () => {
@@ -45,7 +46,7 @@ function Header() {
             {login ? (
               <h5>
                 hello!
-                <br /> {JSON.parse(localStorage.getItem("email"))}
+                <br /> {JSON.parse(Cookies.get("email_token"))}
               </h5>
             ) : (
               ""

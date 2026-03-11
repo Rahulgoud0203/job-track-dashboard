@@ -1,7 +1,8 @@
 import "./index.css";
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import {useState } from "react";
+import { useNavigate,Navigate } from "react-router";
+import Cookies from "js-cookie"
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,11 +10,7 @@ const Login = () => {
   const [errorMsg, seterrorMsg] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem("email") !== null) {
-      navigate("/", { replace: true });
-    }
-  }, []);
+  
 
   const onEmail = (event) => {
     setEmail(event.target.value);
@@ -51,10 +48,15 @@ const Login = () => {
       return;
     }
 
-    localStorage.setItem("email", JSON.stringify(email));
+    Cookies.set("email_token", JSON.stringify(email));
     seterrorMsg("");
     navigate("/", { replace: true });
   };
+
+  const email_token=Cookies.get("email_token")
+  if(email_token!==undefined){
+    return <Navigate to="/"/>
+  }
 
   return (
     <div className="login-main-container">

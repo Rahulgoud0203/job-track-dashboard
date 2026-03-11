@@ -1,20 +1,17 @@
 import "./index.css";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, Navigate } from "react-router";
 import { useEffect, useState } from "react";
-
+import Cookies from "js-cookie";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, seterrorMsg] = useState("");
-  const navigate = useNavigate();
-  useEffect(() => {
-    console.log(localStorage.getItem("email"));
-    if (localStorage.getItem("email") !== null) {
-      navigate("/", { replace: true });
-    }
-  }, []);
+  console.log(localStorage.getItem("email"));
+  if (Cookies.get("email_token") !== undefined) {
+    return <Navigate to="/" />;
+  }
 
   const onEmailChange = (event) => {
     setEmail(event.target.value);

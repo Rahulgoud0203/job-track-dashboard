@@ -1,10 +1,11 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { Navigate, useNavigate } from "react-router";
+import Cookies from "js-cookie";
 function EditJob() {
   const navigate = useNavigate();
-  if (localStorage.getItem("email") === null) {
+  if (Cookies.get("email_token") === undefined) {
     return <Navigate to="/login" />;
   }
 
@@ -19,7 +20,7 @@ function EditJob() {
 
   const onUpdate = (event) => {
     event.preventDefault();
-    if (localStorage.getItem("email") === null) {
+    if (Cookies.get("email_token") === undefined) {
       navigate("/login", { replace: true });
     } else {
       const updatedJob = JobsList.map((itm) =>

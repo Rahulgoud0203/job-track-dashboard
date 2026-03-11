@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./index.css";
 import { useNavigate, Navigate } from "react-router";
+import Cookies from "js-cookie";
 const AddJob = () => {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -8,7 +9,7 @@ const AddJob = () => {
   const [Msg, seterrorMsg] = useState("");
   const [companyName, setcompantName] = useState("");
   const jobList = JSON.parse(localStorage.getItem("jobs")) || [];
-  if (localStorage.getItem("email") === null) {
+  if (Cookies.get("email_token") === undefined) {
     return <Navigate to="/login" />;
   }
 
