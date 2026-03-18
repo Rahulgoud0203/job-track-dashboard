@@ -1,14 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
-import { Navigate, useNavigate } from "react-router";
+import {useNavigate } from "react-router";
 import Cookies from "js-cookie";
 function EditJob() {
   const navigate = useNavigate();
-  if (Cookies.get("email_token") === undefined) {
-    return <Navigate to="/login" />;
-  }
-
   const { id } = useParams();
   let JobsList = JSON.parse(localStorage.getItem("jobs")) || [];
 

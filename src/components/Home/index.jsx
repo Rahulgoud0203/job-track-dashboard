@@ -1,8 +1,6 @@
 import "./index.css";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 function Home() {
-  const navi = useNavigate();
-
   return (
     <div className="app-container">
       <div>

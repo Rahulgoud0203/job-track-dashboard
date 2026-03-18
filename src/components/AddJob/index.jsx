@@ -9,10 +9,8 @@ const AddJob = () => {
   const [Msg, seterrorMsg] = useState("");
   const [companyName, setcompantName] = useState("");
   const jobList = JSON.parse(localStorage.getItem("jobs")) || [];
-  if (Cookies.get("email_token") === undefined) {
-    return <Navigate to="/login" />;
-  }
 
+  
   const onSearchCompany = async () => {
     const apiUrl = `https://api.agify.io/?name=${company}`;
     const response = await fetch(apiUrl);

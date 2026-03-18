@@ -1,6 +1,6 @@
 import "./index.css";
-import { Link, useNavigate, Navigate } from "react-router";
-import { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router";
+import { useState } from "react";
 import Cookies from "js-cookie";
 const Register = () => {
   const [name, setName] = useState("");

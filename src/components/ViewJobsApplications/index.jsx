@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "./index.css";
+import Cookies from "js-cookie";
 
 function ViewJobsApplications() {
   const [searchInp, setSearchInp] = useState("");
@@ -10,13 +11,24 @@ function ViewJobsApplications() {
       : [],
   );
   const [statusFilter, setSatatusFilter] = useState("");
+  const navigate = useNavigate();
 
   const onDelete = (id) => {
-    const afterDelData = JobsList.filter((itm) => itm.uniqueId !== id);
-    setJobsData(afterDelData);
-    localStorage.setItem("jobs", JSON.stringify(afterDelData));
+    if (checkAuthenticated()) {
+      const afterDelData = JobsList.filter((itm) => itm.uniqueId !== id);
+      setJobsData(afterDelData);
+      localStorage.setItem("jobs", JSON.stringify(afterDelData));
+    } else {
+      navigate("/");
+    }
   };
 
+  const checkAuthenticated = () => {
+    if (Cookies.get("email_token") === undefined) {
+      return false;
+    }
+    return true;
+  };
   const onSearch = (e) => {
     setSearchInp(e.target.value.toLowerCase());
   };
