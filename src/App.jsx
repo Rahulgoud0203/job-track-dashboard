@@ -11,7 +11,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
       <div className="main-content">
         <Routes>
           <Route

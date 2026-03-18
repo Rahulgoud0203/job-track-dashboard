@@ -3,7 +3,6 @@ import "./index.css";
 import { useNavigate, Link, useLocation } from "react-router";
 import Cookies from "js-cookie";
 function Header() {
-  let data;
   const [login, setLogin] = useState(false);
   const nav = useNavigate();
   const location = useLocation();
@@ -18,6 +17,7 @@ function Header() {
   const onLogOut = () => {
     Cookies.remove("email_token");
     setLogin(false);
+    onLogIn();
   };
   const onLogIn = () => {
     nav("/login");

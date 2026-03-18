@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import "./index.css";
 import Cookies from "js-cookie";
-
+import Header from "../Header";
 function ViewJobsApplications() {
   const [searchInp, setSearchInp] = useState("");
   const [JobsList, setJobsData] = useState(
@@ -39,67 +39,71 @@ function ViewJobsApplications() {
   );
 
   return (
-    <div className="main-container">
-      <div className="card">
-        <h1 className="title">Job Applications</h1>
+    <div>
+      <Header />
 
-        <Link to="/createJob">
-          <button className="add-btn">Add Job</button>
-        </Link>
+      <div className="main-container">
+        <div className="card">
+          <h1 className="title">Job Applications</h1>
 
-        <div className="search-filter">
-          <input
-            type="text"
-            placeholder="Search company or role..."
-            className="search-input"
-            onChange={onSearch}
-          />
+          <Link to="/createJob">
+            <button className="add-btn">Add Job</button>
+          </Link>
 
-          <select
-            className="filter-select"
-            onChange={(e) => setSatatusFilter(e.target.value)}
-          >
-            <option>All</option>
-            <option>Applied</option>
-            <option>Interview</option>
-            <option>Offer</option>
-            <option>Rejected</option>
-          </select>
-        </div>
+          <div className="search-filter">
+            <input
+              type="text"
+              placeholder="Search company or role..."
+              className="search-input"
+              onChange={onSearch}
+            />
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+            <select
+              className="filter-select"
+              onChange={(e) => setSatatusFilter(e.target.value)}
+            >
+              <option>All</option>
+              <option>Applied</option>
+              <option>Interview</option>
+              <option>Offer</option>
+              <option>Rejected</option>
+            </select>
+          </div>
 
-          <tbody>
-            {filtered.map((job) => (
-              <tr key={job.uniqueId}>
-                <td>{job.company}</td>
-                <td>{job.role}</td>
-                <td>{job.status}</td>
-
-                <td>
-                  <Link to={"/EditJob/" + job.uniqueId}>
-                    <button className="edit-btn">Edit</button>
-                  </Link>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() => onDelete(job.uniqueId)}
-                  >
-                    Delete
-                  </button>
-                </td>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {filtered.map((job) => (
+                <tr key={job.uniqueId}>
+                  <td>{job.company}</td>
+                  <td>{job.role}</td>
+                  <td>{job.status}</td>
+
+                  <td>
+                    <Link to={"/EditJob/" + job.uniqueId}>
+                      <button className="edit-btn">Edit</button>
+                    </Link>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => onDelete(job.uniqueId)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
