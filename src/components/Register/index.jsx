@@ -1,54 +1,67 @@
 import "./index.css";
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useState } from "react";
 import Cookies from "js-cookie";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMsg, seterrorMsg] = useState("");
-  console.log(localStorage.getItem("email"));
-  if (Cookies.get("email_token") !== undefined) {
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
+
+  if (Cookies.get("email_token")) {
     return <Navigate to="/" />;
   }
 
-  const onEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-  const onPasswordChange = (event) => {
-    setPassword(event.target.value);
-    console.log(password);
-  };
-
   const onSubmitForm = (event) => {
     event.preventDefault();
-    console.log({ name, email, password, confirmPassword });
-    if (name === "") {
-      seterrorMsg("Required Name Fiels");
-    } else if (email === "") {
-      seterrorMsg("Required Email Fiels");
-    } else if (password === "") {
-      seterrorMsg("Required password Field");
-    } else if (confirmPassword === "") {
-      seterrorMsg("Required  conform password Field");
-    } else if (password !== confirmPassword) {
-      seterrorMsg("Confirm password  should match password");
-    } else {
-      let usersList = JSON.parse(localStorage.getItem("Users")) || [];
-      const newUser = {
-        name: name,
-        email: email,
-        password: password,
-      };
-      let updatedUser = [...usersList, newUser];
 
-      seterrorMsg("Successfuly Registered");
-      localStorage.setItem("Users", JSON.stringify(updatedUser));
-      setTimeout(() => {
-        seterrorMsg("Go to login page for login");
-      }, 600);
+    if (!name.trim()) {
+      setErrorMsg("Name is required");
+      return;
     }
+    if (!email.trim()) {
+      setErrorMsg("Email is required");
+      return;
+    }
+    if (!password.trim()) {
+      setErrorMsg("Password is required");
+      return;
+    }
+    if (!confirmPassword.trim()) {
+      setErrorMsg("Confirm Password is required");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match");
+      return;
+    }
+
+    let usersList = JSON.parse(localStorage.getItem("Users")) || [];
+
+    const existingUser = usersList.find((user) => user.email === email);
+
+    if (existingUser) {
+      setErrorMsg("User already exists");
+      return;
+    }
+
+    const newUser = { name, email, password };
+
+    localStorage.setItem("Users", JSON.stringify([...usersList, newUser]));
+
+    setErrorMsg("Registered successfully!");
+
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   };
 
   return (
@@ -61,7 +74,7 @@ const Register = () => {
           placeholder="Full Name"
           className="register-input"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
 
         <input
@@ -69,7 +82,7 @@ const Register = () => {
           placeholder="Email"
           className="register-input"
           value={email}
-          onChange={onEmailChange}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
@@ -77,7 +90,7 @@ const Register = () => {
           placeholder="Password"
           className="register-input"
           value={password}
-          onChange={onPasswordChange}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <input
@@ -85,9 +98,11 @@ const Register = () => {
           placeholder="Confirm Password"
           className="register-input"
           value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
+
         <p className="error-msg">{errorMsg}</p>
+
         <button type="submit" className="register-button">
           Register
         </button>

@@ -1,17 +1,26 @@
 .register-main-container {
-  height: 100%;
+  min-height: 100vh;
   display: flex;
-  justify-content: space-around;
-  background-color: #f4f6f8;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px;
 }
 
 .register-card {
-  width: 420px;
-  background-color: white;
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  color: var(--text);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
+}
+
+.dark .register-card {
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.6);
 }
 
 .register-heading {
@@ -25,29 +34,38 @@
   padding: 12px;
   margin-bottom: 25px;
   border-radius: 6px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   font-size: 15px;
   outline: none;
+  transition: 0.2s ease;
+  background: var(--card);
+  color: var(--text);
+}
+
+.dark .register-input {
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .register-input:focus {
-  border: 2px solid #1d72e8;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(29, 114, 232, 0.2);
 }
 
 .register-button {
   width: 100%;
   padding: 12px;
-  background-color: #2ea043;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 10px;
+  transition: 0.2s ease;
 }
 
 .register-button:hover {
-  background-color: #22863a;
+  opacity: 0.85;
 }
 
 .login-text {
@@ -55,6 +73,10 @@
 }
 
 .login-link {
-  color: purple;
+  color: var(--primary);
   text-decoration: underline;
+}
+
+.login-link:hover {
+  opacity: 0.8;
 }

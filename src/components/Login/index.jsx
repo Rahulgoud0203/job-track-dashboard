@@ -1,61 +1,56 @@
 import "./index.css";
-import { Link } from "react-router";
-import {useState } from "react";
-import { useNavigate,Navigate } from "react-router";
-import Cookies from "js-cookie"
+import { Link, useNavigate, Navigate } from "react-router";
+import { useState } from "react";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, seterrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-
-  
-
-  const onEmail = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const onPassword = (event) => {
-    setPassword(event.target.value);
-  };
 
   const onSubmitBtn = (event) => {
     event.preventDefault();
 
-    if (email === "" || password === "") {
-      if (email === "" && password === "") {
-        seterrorMsg("Email and Password are Required");
-      } else if (email === "") {
-        seterrorMsg("Email is Required");
-      } else {
-        seterrorMsg("Password is Required");
-      }
+    if (!email.trim() && !password.trim()) {
+      setErrorMsg("Email and Password are required");
+      return;
+    }
+    if (!email.trim()) {
+      setErrorMsg("Email is required");
+      return;
+    }
+    if (!password.trim()) {
+      setErrorMsg("Password is required");
       return;
     }
 
-    let userList = JSON.parse(localStorage.getItem("Users")) || [];
+    let userList = [];
+    try {
+      userList = JSON.parse(localStorage.getItem("Users")) || [];
+    } catch {
+      userList = [];
+    }
 
-    const userdata = userList.find((itm) => itm.email === email);
+    const user = userList.find((itm) => itm.email === email);
 
-    if (!userdata) {
-      seterrorMsg("Incorrect Email");
+    if (!user) {
+      setErrorMsg("Incorrect Email");
       return;
     }
 
-    if (userdata.password !== password) {
-      seterrorMsg("Incorrect Password");
+    if (user.password !== password) {
+      setErrorMsg("Incorrect Password");
       return;
     }
 
-    Cookies.set("email_token", JSON.stringify(email));
-    seterrorMsg("");
+    Cookies.set("email_token", email);
+    setErrorMsg("");
     navigate("/", { replace: true });
   };
 
-  const email_token=Cookies.get("email_token")
-  if(email_token!==undefined){
-    return <Navigate to="/"/>
+  if (Cookies.get("email_token")) {
+    return <Navigate to="/" />;
   }
 
   return (
@@ -67,7 +62,7 @@ const Login = () => {
           type="email"
           placeholder="Email"
           className="login-input"
-          onChange={onEmail}
+          onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
 
@@ -75,7 +70,7 @@ const Login = () => {
           type="password"
           placeholder="Password"
           className="login-input"
-          onChange={onPassword}
+          onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
 
@@ -84,7 +79,7 @@ const Login = () => {
         <button className="login-button">Login</button>
 
         <p className="register-text">
-          Don't have an account?
+          Don't have an account?{" "}
           <Link to="/register" className="register-link">
             Register
           </Link>

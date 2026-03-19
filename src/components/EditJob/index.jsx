@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import {useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 function EditJob() {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ function EditJob() {
   const jobEdit = JobsList.find((itm) => itm.uniqueId === id);
 
   const [company, setCompany] = useState(jobEdit.company);
+  // console.log(company);
   const [role, setRole] = useState(jobEdit.role);
   const [status, setStatus] = useState(jobEdit.status);
 

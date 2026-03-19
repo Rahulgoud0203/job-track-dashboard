@@ -4,45 +4,64 @@
   left: 0;
   width: 100%;
   height: 70px;
-  background-color: #d2ab78;
+  background: var(--card);
+  color: var(--text);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 20px;
+  padding: 5px 40px;
   z-index: 10000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .header-cnt {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo-cnt {
   display: flex;
   align-items: center;
-  gap: 3px;
-  padding-left: 30px;
-}
-.logo {
-  width: 42px;
-  height: 25px;
-  border-radius: 10px;
-}
-.Update-icons {
-  display: flex;
-  gap: 15px;
-  align-items: center;
+  gap: 8px;
 }
 
 .profile-details {
   display: flex;
   align-items: center;
-  padding-right: 30px;
   gap: 10px;
+  margin-right: 20px;
 }
+
 .profile-details h5 {
-  color: White;
+  color: var(--text);
+  font-size: 14px;
+  margin: 0;
 }
-button {
-  margin-bottom: 25px;
+
+.profile-details button {
+  background: var(--primary);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 100px;
   color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-right: 30px;
 }
+
+.profile-details button:hover {
+  opacity: 0.85;
+}
+
 .link-btn {
   text-decoration: none;
-  color: whitesmoke;
+  color: var(--text);
+  font-weight: bold;
+}
+
+.link-btn:hover {
+  opacity: 0.8;
+}
+
+body {
+  padding-top: 70px;
 }

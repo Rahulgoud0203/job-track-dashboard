@@ -1,41 +1,43 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import "./index.css";
-import Cookies from "js-cookie";
 import Header from "../Header";
+
 function ViewJobsApplications() {
   const [searchInp, setSearchInp] = useState("");
-  const [JobsList, setJobsData] = useState(
-    JSON.parse(localStorage.getItem("jobs")) !== null
-      ? JSON.parse(localStorage.getItem("jobs"))
-      : [],
+  const [jobsList, setJobsList] = useState(
+    JSON.parse(localStorage.getItem("jobs")) || []
   );
-  const [statusFilter, setSatatusFilter] = useState("");
-  const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState("All");
 
+  
   const onDelete = (id) => {
-    if (checkAuthenticated()) {
-      const afterDelData = JobsList.filter((itm) => itm.uniqueId !== id);
-      setJobsData(afterDelData);
-      localStorage.setItem("jobs", JSON.stringify(afterDelData));
-    } else {
-      navigate("/");
-    }
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this job?"
+    );
+
+    if (!confirmDelete) return;
+
+    const updated = jobsList.filter((itm) => itm.uniqueId !== id);
+    setJobsList(updated);
+    localStorage.setItem("jobs", JSON.stringify(updated));
   };
 
-  const checkAuthenticated = () => {
-    if (Cookies.get("email_token") === undefined) {
-      return false;
-    }
-    return true;
-  };
-  const onSearch = (e) => {
-    setSearchInp(e.target.value.toLowerCase());
-  };
-  let filtered = JobsList.filter(
-    (itm) =>
-      itm.company.toLowerCase().includes(searchInp) &&
-      itm.status.includes(statusFilter === "All" ? "" : statusFilter),
+  
+  const filtered = jobsList.filter((itm) => {
+    const searchMatch =
+      itm.company.toLowerCase().includes(searchInp) ||
+      itm.role.toLowerCase().includes(searchInp);
+
+    const statusMatch =
+      statusFilter === "All" || itm.status === statusFilter;
+
+    return searchMatch && statusMatch;
+  });
+
+
+  const sortedJobs = [...filtered].sort(
+    (a, b) => b.uniqueId - a.uniqueId
   );
 
   return (
@@ -46,8 +48,8 @@ function ViewJobsApplications() {
         <div className="card">
           <h1 className="title">Job Applications</h1>
 
-          <Link to="/createJob">
-            <button className="add-btn">Add Job</button>
+          <Link to="/createJob" className="add-btn">
+            Add Job
           </Link>
 
           <div className="search-filter">
@@ -55,12 +57,14 @@ function ViewJobsApplications() {
               type="text"
               placeholder="Search company or role..."
               className="search-input"
-              onChange={onSearch}
+              onChange={(e) =>
+                setSearchInp(e.target.value.toLowerCase())
+              }
             />
 
             <select
               className="filter-select"
-              onChange={(e) => setSatatusFilter(e.target.value)}
+              onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option>All</option>
               <option>Applied</option>
@@ -70,26 +74,39 @@ function ViewJobsApplications() {
             </select>
           </div>
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Company</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
 
-            <tbody>
-              {filtered.map((job) => (
-                <tr key={job.uniqueId}>
-                  <td>{job.company}</td>
-                  <td>{job.role}</td>
-                  <td>{job.status}</td>
+          {sortedJobs.length === 0 ? (
+            <div className="empty-state">
+              <h2> No Jobs Yet</h2>
+              <p>Start tracking your job applications!</p>
+              <Link to="/createJob" className="add-btn">
+                Add Your First Job
+              </Link>
+            </div>
+          ) : (
+            <div className="jobs-list">
+              {sortedJobs.map((job) => (
+                <div key={job.uniqueId} className="job-card">
+                  
+                  <div className="job-left">
+                    <h3>{job.company}</h3>
+                    <p>{job.role}</p>
+                  </div>
 
-                  <td>
-                    <Link to={"/EditJob/" + job.uniqueId}>
-                      <button className="edit-btn">Edit</button>
+                  <div className="job-middle">
+                    <span
+                      className={`status ${job.status.toLowerCase()}`}
+                    >
+                      {job.status}
+                    </span>
+                  </div>
+
+                  <div className="job-right">
+                    <Link
+                      to={`/EditJob/${job.uniqueId}`}
+                      className="edit-btn"
+                    >
+                      Edit
                     </Link>
 
                     <button
@@ -98,11 +115,12 @@ function ViewJobsApplications() {
                     >
                       Delete
                     </button>
-                  </td>
-                </tr>
+                  </div>
+
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

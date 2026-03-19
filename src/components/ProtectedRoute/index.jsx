@@ -1,8 +1,11 @@
 import Cookies from "js-cookie";
 import { Navigate } from "react-router";
+
 const ProtectedRoute = ({ children }) => {
-  if (Cookies.get("email_token") === undefined) {
-    return <Navigate to="/login" />;
+  const token = Cookies.get("email_token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;

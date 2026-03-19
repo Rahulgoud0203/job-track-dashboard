@@ -20,7 +20,7 @@ const AddJob = () => {
   const addJob = (event) => {
     event.preventDefault();
 
-    console.log(company, role, status);
+    // console.log(company, role, status);
 
     let newJob = {
       uniqueId: new Date(),
